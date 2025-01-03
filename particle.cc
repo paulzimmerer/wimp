@@ -2,15 +2,19 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
+MyCustomParticle* MyCustomParticle::theWIMP = nullptr;
 // Singleton-Instanz
 MyCustomParticle* MyCustomParticle::Instance() {
-    static MyCustomParticle instance;
-    return &instance;
+    return theWIMP;
 }
 
 // Definition des Partikels
 MyCustomParticle* MyCustomParticle::Definition() {
-    return Instance();
+    if(!theWIMP) {
+        theWIMP = new MyCustomParticle();
+        G4cout << "New WIMP created" << G4endl;
+    }
+    return theWIMP;
 }
 
 // Konstruktor
