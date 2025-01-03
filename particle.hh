@@ -12,6 +12,7 @@ public:
 private:
     MyCustomParticle();
     ~MyCustomParticle();
+    static MyCustomParticle* theWIMP;
 };
 
 #endif
