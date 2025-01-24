@@ -18,6 +18,9 @@ private:
 	virtual G4bool ProcessHits(G4Step *, G4TouchableHistory *);
 	
 	G4PhysicsOrderedFreeVector *quEff;
+	
+    	std::set<G4int> trackedParticles; // Set, um Teilchen-IDs zu speichern
+
 };
 
 #endif
