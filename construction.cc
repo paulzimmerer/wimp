@@ -87,6 +87,27 @@ void MyDetectorConstruction::ConstructEarth()
 	G4LogicalVolume *logickruste2 = new G4LogicalVolume(kruste2, Kruste, "logickruste2");
 	G4VPhysicalVolume *physkruste2 = new G4PVPlacement(0, position, logickruste2, "physkruste2", logicDetector, false, 0, true);
 	
+<<<<<<< HEAD
+			G4Sphere *solidDetector = new G4Sphere("kugel", r_min, r_max, phi_start, phi_delta, theta_start, theta_delta);
+
+			logicDetector = new G4LogicalVolume(solidDetector, worldMat, "logicDetector");
+			
+			MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
+	
+			if(logicDetector != NULL)
+				logicDetector->SetSensitiveDetector(sensDet);
+			
+			physDetector = new G4PVPlacement(0, position, logicDetector, "physDetector", logicWorld, false, i*n_theta+j, true);
+		}
+	}
+	
+	G4double rü_min = 5711*m;
+	G4double rae_max = 6371*km;
+	G4double phi_start = 0*deg;
+	G4double phi_delta = 360*deg;
+	G4double theta_start = 0*deg;
+	G4double thetaä_delta = 180*deg;
+=======
 	// Obere Mantel
 	G4double rom_max = 6351*km;
 	
@@ -96,6 +117,7 @@ void MyDetectorConstruction::ConstructEarth()
 	
 	// Unterer Mantel
 	G4double rum_max = 5711*km;
+>>>>>>> c75b6072a797decca0614cb10829d096aa2cafe8
 	
 	G4Sphere *uMantel = new G4Sphere ("uMantel", r_min, rum_max, phi_start, phi_delta, theta_start, theta_delta);
 	G4LogicalVolume *logicuMantel = new G4LogicalVolume(uMantel, solidEisen, "logicuMantel");
