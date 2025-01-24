@@ -1,0 +1,4 @@
+/home/paul/wimp/wimp/build/CMakeFiles/rebuild_cache.dir
+/home/paul/wimp/wimp/build/CMakeFiles/Simulation.dir
+/home/paul/wimp/wimp/build/CMakeFiles/edit_cache.dir
+/home/paul/wimp/wimp/build/CMakeFiles/sim.dir

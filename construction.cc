@@ -138,10 +138,10 @@ void MyDetectorConstruction::ConstructEarth4()
 		}
 	}
 	
-	G4double rä_min = 5711*m;
-	G4double rä_max = 6371*km;
+	G4double rü_min = 5711*m;
+	G4double rae_max = 6371*km;
 	G4double phi_start = 0*deg;
-	G4double phiä_delta = 360*deg;
+	G4double phi_delta = 360*deg;
 	G4double theta_start = 0*deg;
 	G4double thetaä_delta = 180*deg;
 	
