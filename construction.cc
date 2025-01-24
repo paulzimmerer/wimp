@@ -43,7 +43,7 @@ void MyDetectorConstruction::DefineMaterial()
 	UMantel->AddElement(nist->FindOrBuildElement("Si"), 22.6*perCent);
 	UMantel->AddElement(nist->FindOrBuildElement("Fe"), 6.5*perCent);
 		
-	liquidEisen = new G4Material("Flüssiges Eisen", 11.0*g/cm3, 1);
+	liquidEisen = new G4Material("Fluessiges Eisen", 11.0*g/cm3, 1);
 	liquidEisen->AddElement(nist->FindOrBuildElement("Fe"), 1);
 	
 	solidEisen = new G4Material("Festes Eisen", 12.8*g/cm3, 1);
@@ -64,7 +64,7 @@ void MyDetectorConstruction::ConstructEarth()
 	G4ThreeVector Earthposition = G4ThreeVector(0,0,7000*km);
 	G4ThreeVector position = G4ThreeVector(0,0,0);
 	
-	//Kruste über Detektoren
+	//Kruste ueber Detektoren
 	G4double rkruste_max = 6371*km;
 	
 	G4Sphere *kruste = new G4Sphere ("kruste", r_min, rkruste_max, phi_start, phi_delta, theta_start, theta_delta);
@@ -87,27 +87,6 @@ void MyDetectorConstruction::ConstructEarth()
 	G4LogicalVolume *logickruste2 = new G4LogicalVolume(kruste2, Kruste, "logickruste2");
 	G4VPhysicalVolume *physkruste2 = new G4PVPlacement(0, position, logickruste2, "physkruste2", logicDetector, false, 0, true);
 	
-<<<<<<< HEAD
-			G4Sphere *solidDetector = new G4Sphere("kugel", r_min, r_max, phi_start, phi_delta, theta_start, theta_delta);
-
-			logicDetector = new G4LogicalVolume(solidDetector, worldMat, "logicDetector");
-			
-			MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
-	
-			if(logicDetector != NULL)
-				logicDetector->SetSensitiveDetector(sensDet);
-			
-			physDetector = new G4PVPlacement(0, position, logicDetector, "physDetector", logicWorld, false, i*n_theta+j, true);
-		}
-	}
-	
-	G4double rü_min = 5711*m;
-	G4double rae_max = 6371*km;
-	G4double phi_start = 0*deg;
-	G4double phi_delta = 360*deg;
-	G4double theta_start = 0*deg;
-	G4double thetaä_delta = 180*deg;
-=======
 	// Obere Mantel
 	G4double rom_max = 6351*km;
 	
@@ -117,26 +96,25 @@ void MyDetectorConstruction::ConstructEarth()
 	
 	// Unterer Mantel
 	G4double rum_max = 5711*km;
->>>>>>> c75b6072a797decca0614cb10829d096aa2cafe8
 	
 	G4Sphere *uMantel = new G4Sphere ("uMantel", r_min, rum_max, phi_start, phi_delta, theta_start, theta_delta);
-	G4LogicalVolume *logicuMantel = new G4LogicalVolume(uMantel, solidEisen, "logicuMantel");
+	G4LogicalVolume *logicuMantel = new G4LogicalVolume(uMantel, UMantel, "logicuMantel");
 	G4VPhysicalVolume *physuMantel = new G4PVPlacement(0, position, logicuMantel, "physuMantel", logicoMantel, false, 0, true);
 	
-	// Fester Kern
+	// Fluessiger Kern
 	G4double rfl_max = 3471*km;
 	
-	G4Sphere *flüssigkern = new G4Sphere ("flüssigkern", r_min, rfl_max, phi_start, phi_delta, theta_start, theta_delta);
-	G4LogicalVolume *logicflüssigkern = new G4LogicalVolume(flüssigkern, solidEisen, "logicflüssigkern");
-	G4VPhysicalVolume *physflüssigkern = new G4PVPlacement(0, position, logicflüssigkern, "physflüssigkern", logicuMantel, false, 0, true);
+	G4Sphere *fluessigkern = new G4Sphere ("fluessigkern", r_min, rfl_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logicfluessigkern = new G4LogicalVolume(fluessigkern, liquidEisen, "logicfluessigkern");
+	G4VPhysicalVolume *physfluessigkern = new G4PVPlacement(0, position, logicfluessigkern, "physfluessigkern", logicuMantel, false, 0, true);
 	
 	
-	// Flüssiger Kern
+	// Fester Kern
 	G4double rfest_max = 1221*km;
 
 	G4Sphere *festerkern = new G4Sphere ("festerkern", r_min, rfest_max, phi_start, phi_delta, theta_start, theta_delta);
 	G4LogicalVolume *logicfesterkern = new G4LogicalVolume(festerkern, solidEisen, "logicfesterkern");
-	G4VPhysicalVolume *physfesterkern = new G4PVPlacement(0, position, logicfesterkern, "physfesterkern", logicflüssigkern, false, 0, true);
+	G4VPhysicalVolume *physfesterkern = new G4PVPlacement(0, position, logicfesterkern, "physfesterkern", logicfluessigkern, false, 0, true);
 }
 
 G4VPhysicalVolume *MyDetectorConstruction::Construct()
