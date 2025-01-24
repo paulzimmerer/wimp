@@ -29,7 +29,6 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
 	G4ThreeVector momWIMP = preStepPoint->GetMomentum();
 	G4ThreeVector dirWIMP = preStepPoint->GetMomentumDirection();
 		
-	G4double wlen = (1.239841939*eV/momWIMP.mag())*1E+03;
 	G4double kinEnergy = track->GetKineticEnergy();
 	
 	const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();

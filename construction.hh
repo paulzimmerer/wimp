@@ -40,23 +40,15 @@ private:
 	
 	G4LogicalVolume *fScoringVolume;
 	
-	G4Material *SiO2, *H2O, *Aerogel, *worldMat, *NaI, *Kruste, *OMantel, *UMantel, *liquidEisen, *solidEisen;
-	G4Element *C, *Na, *I;
+	G4Material *Vakuum, *worldMat, *Kruste, *OMantel, *UMantel, *liquidEisen, *solidEisen;
 	
 	void DefineMaterial();
 	
-	void ConstructCherenkov();
-	void ConstructScintillator();
 	void ConstructEarth();
-	void ConstructEarth2();
-	void ConstructEarth3();
-	void ConstructEarth4();
 	
 	G4double xWorld, yWorld, zWorld;
 	
 	G4bool isCherenkov, isScintillator, isEarth, isEarth2, isEarth3, isEarth4;
-	
-	G4OpticalSurface *mirrorSurface;
 };
 
 #endif
