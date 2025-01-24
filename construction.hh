@@ -40,7 +40,7 @@ private:
 	
 	G4LogicalVolume *fScoringVolume;
 	
-	G4Material *SiO2, *H2O, *Aerogel, *worldMat, *NaI, *Granit, *solidEisen, *Peridotit;
+	G4Material *SiO2, *H2O, *Aerogel, *worldMat, *NaI, *Kruste, *OMantel, *UMantel, *liquidEisen, *solidEisen;
 	G4Element *C, *Na, *I;
 	
 	void DefineMaterial();

@@ -15,11 +15,11 @@ void MyEventAction::BeginOfEventAction(const G4Event*)
 
 void MyEventAction::EndOfEventAction(const G4Event*)
 {
-	G4cout << "Energy depostion: " << fEdep << G4endl;
+	//G4cout << "Energy depostion: " << fEdep << G4endl;
 	
 	G4AnalysisManager *man = G4AnalysisManager::Instance();
 	
-	man->FillNtupleDColumn(2, 0, fEdep);
+	//man->FillNtupleDColumn(2, 0, fEdep);
 	
-	man->AddNtupleRow(2);
+	//man->AddNtupleRow(2);
 }

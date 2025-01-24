@@ -15,9 +15,9 @@ MyDetectorConstruction::MyDetectorConstruction()
 	
 	DefineMaterial();
 	
-	xWorld = 20000*km;
-	yWorld = 20000*km;
-	zWorld = 20000*km;
+	xWorld = 10000*km;
+	yWorld = 10000*km;
+	zWorld = 15000*km;
 }
 
 MyDetectorConstruction::~MyDetectorConstruction()
@@ -27,18 +27,30 @@ void MyDetectorConstruction::DefineMaterial()
 {
 	G4NistManager *nist = G4NistManager::Instance();
 	
-	Granit = new G4Material("Granit", 2.7*g/cm3, 2);
-	Granit->AddElement(nist->FindOrBuildElement("O"), 1);
-	Granit->AddElement(nist->FindOrBuildElement("Si"), 1);
+	Kruste = new G4Material("Kruste", 2.7*g/cm3, 6);
+	Kruste->AddElement(nist->FindOrBuildElement("O"), 48.7*perCent);
+	Kruste->AddElement(nist->FindOrBuildElement("Si"), 29.7*perCent);
+	Kruste->AddElement(nist->FindOrBuildElement("Al"), 8.5*perCent);
+	Kruste->AddElement(nist->FindOrBuildElement("Fe"), 6.4*perCent);
+	Kruste->AddElement(nist->FindOrBuildElement("Mg"), 4.2*perCent);
+	Kruste->AddElement(nist->FindOrBuildElement("Ca"), 2.5*perCent);
 	
-	Peridotit = new G4Material("Peridotit", 4.0*g/cm3, 2);
-	Peridotit->AddElement(nist->FindOrBuildElement("O"), 1);
-	Peridotit->AddElement(nist->FindOrBuildElement("Si"), 1);
+	OMantel = new G4Material("OMantel", 3.5*g/cm3, 4);
+	OMantel->AddElement(nist->FindOrBuildElement("O"), 46.8*perCent);
+	OMantel->AddElement(nist->FindOrBuildElement("Mg"), 24.5*perCent);
+	OMantel->AddElement(nist->FindOrBuildElement("Si"), 22.3*perCent);
+	OMantel->AddElement(nist->FindOrBuildElement("Fe"), 6.4*perCent);
 	
-	G4Material *liquidEisen = new G4Material("Flüssiges Eisen", 12.0*g/cm3, 1);
+	UMantel = new G4Material("UMantel", 4.5*g/cm3, 4);
+	UMantel->AddElement(nist->FindOrBuildElement("O"), 47.3*perCent);
+	UMantel->AddElement(nist->FindOrBuildElement("Mg"), 23.6*perCent);
+	UMantel->AddElement(nist->FindOrBuildElement("Si"), 22.6*perCent);
+	UMantel->AddElement(nist->FindOrBuildElement("Fe"), 6.5*perCent);
+		
+	G4Material *liquidEisen = new G4Material("Flüssiges Eisen", 11.0*g/cm3, 1);
 	liquidEisen->AddElement(nist->FindOrBuildElement("Fe"), 1);
 	
-	solidEisen = new G4Material("Festes Eisen", 13.0*g/cm3, 1);
+	solidEisen = new G4Material("Festes Eisen", 12.8*g/cm3, 1);
 	solidEisen->AddElement(nist->FindOrBuildElement("Fe"), 1);
 	
 	SiO2 = new G4Material("SiO2", 2.201*g/cm3, 2);
@@ -107,61 +119,72 @@ void MyDetectorConstruction::DefineMaterial()
 
 
 
-void MyDetectorConstruction::ConstructEarth4()
+void MyDetectorConstruction::ConstructEarth()
 {	
-	G4double n_phi = 1;
-	G4double n_theta = 2;
-	G4double r_min = 6371*km;
-	G4double r_max = 6371.0000000001*km;
-	G4double phi_delta = 360/n_phi*deg;
-	G4double theta_delta = 180/n_theta*deg;
-	
-	G4ThreeVector position = G4ThreeVector(0,0,7000*km);
-	
-	for(G4int i=0; i<n_phi; i++) {
-	
-		for(G4int j=0; j<n_theta; j++) {
-		
-			G4double phi_start = i*phi_delta;
-			G4double theta_start = j*theta_delta;
-	
-			G4Sphere *solidDetector = new G4Sphere("kugel", r_min, r_max, phi_start, phi_delta, theta_start, theta_delta);
-
-			logicDetector = new G4LogicalVolume(solidDetector, worldMat, "logicDetector");
-			
-			MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
-	
-			if(logicDetector != NULL)
-				logicDetector->SetSensitiveDetector(sensDet);
-			
-			physDetector = new G4PVPlacement(0, position, logicDetector, "physDetector", logicWorld, false, i*n_theta+j, true);
-		}
-	}
-	
-	G4double rä_min = 5711*m;
-	G4double rä_max = 6371*km;
+	G4double r_min = 0*km;
 	G4double phi_start = 0*deg;
-	G4double phiä_delta = 360*deg;
+	G4double phi_delta = 360*deg;
 	G4double theta_start = 0*deg;
-	G4double thetaä_delta = 180*deg;
+	G4double theta_delta = 180*deg;
+	G4ThreeVector Earthposition = G4ThreeVector(0,0,7000*km);
+	G4ThreeVector position = G4ThreeVector(0,0,0);
 	
-	G4Sphere *äußere_Schale = new G4Sphere ("äußere_Schale", rä_min, rä_max, phi_start, phiä_delta, theta_start, thetaä_delta);
-	G4LogicalVolume *logicäußereSchale = new G4LogicalVolume(äußere_Schale, Granit, "logicäußereSchale");
-	G4VPhysicalVolume *physäußereSchale = new G4PVPlacement(0, position, logicäußereSchale, "physäußereSchale", logicWorld, false, 0, true);
+	//Kruste über Detektoren
+	G4double rkruste_min = 0*km;
+	G4double rkruste_max = 6371*km;
 	
-	G4double ri_min = 3471*km;
-	G4double ri_max = 5711*km;
+	G4Sphere *kruste = new G4Sphere ("kruste", rkruste_min, rkruste_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logickruste = new G4LogicalVolume(kruste, Kruste, "logickruste");
+	G4VPhysicalVolume *physkruste = new G4PVPlacement(0, Earthposition, logickruste, "physkruste", logicWorld, false, 0, true);
+
+	//Detektor
+	G4double det_depth = 1 * km;
+	G4double det_width = 100 * m;
+	G4double rdet_max = rkruste_max - det_depth;
 	
-	G4Sphere *innere_Schale = new G4Sphere ("innere_Schale", ri_min, ri_max, phi_start, phiä_delta, theta_start, thetaä_delta);
-	G4LogicalVolume *logicinnereSchale = new G4LogicalVolume(innere_Schale, Peridotit, "logicinnereSchale");
-	G4VPhysicalVolume *physinnereSchale = new G4PVPlacement(0, position, logicinnereSchale, "physinnereSchale", logicWorld, false, 0, true);
+	G4Sphere *solidDetector = new G4Sphere("solidDetector", r_min, rdet_max, phi_start, phi_delta, theta_start, theta_delta);
+	logicDetector = new G4LogicalVolume(solidDetector, Kruste, "logicDetector");
+	physDetector = new G4PVPlacement(0, position, logicDetector, "physDetector", logickruste, false, 1, true);
+
+	//Kruste unter Detektoren
+	G4double rkruste2_min = 0*m;
+	G4double rkruste2_max = rdet_max - det_width;
 	
-	G4double rk_min = 0.0*km;
-	G4double rk_max = 3471*m;
+	G4Sphere *kruste2 = new G4Sphere ("kruste2", rkruste2_min, rkruste2_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logickruste2 = new G4LogicalVolume(kruste2, Kruste, "logickruste2");
+	G4VPhysicalVolume *physkruste2 = new G4PVPlacement(0, position, logickruste2, "physkruste2", logicDetector, false, 0, true);
 	
-	G4Sphere *kern = new G4Sphere ("kern", rk_min, rk_max, phi_start, phiä_delta, theta_start, thetaä_delta);
-	G4LogicalVolume *logickern = new G4LogicalVolume(kern, solidEisen, "logickerne");
-	G4VPhysicalVolume *physkern = new G4PVPlacement(0, position, logickern, "physkerne", logicWorld, false, 0, true);
+	// Obere Mantel
+	G4double rom_min = 0*km;
+	G4double rom_max = 6351*km;
+	
+	G4Sphere *oMantel = new G4Sphere ("oMantel", rom_min, rom_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logicoMantel = new G4LogicalVolume(oMantel, OMantel, "logicoMantel");
+	G4VPhysicalVolume *physoMantel = new G4PVPlacement(0, position, logicoMantel, "physoMantel", logickruste2, false, 0, true);
+	
+	// Unterer Mantel
+	G4double rum_min = 0*km;
+	G4double rum_max = 5711*km;
+	
+	G4Sphere *uMantel = new G4Sphere ("uMantel", rum_min, rum_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logicuMantel = new G4LogicalVolume(uMantel, solidEisen, "logicuMantel");
+	G4VPhysicalVolume *physuMantel = new G4PVPlacement(0, position, logicuMantel, "physuMantel", logicoMantel, false, 0, true);
+	
+	// Fester Kern
+	G4double rfest_min = 0*km;
+	G4double rfest_max = 3471*km;
+	
+	G4Sphere *festerkern = new G4Sphere ("kern", rfest_min, rfest_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logicfesterkern = new G4LogicalVolume(festerkern, solidEisen, "logicfesterkern");
+	G4VPhysicalVolume *physfesterkern = new G4PVPlacement(0, position, logicfesterkern, "physfesterkern", logicuMantel, false, 0, true);
+	
+	// Flüssiger Kern
+	G4double rfl_min = 0.0*km;
+	G4double rfl_max = 1221*km;
+	
+	G4Sphere *flüssigkern = new G4Sphere ("flüssigkern", rfl_min, rfl_max, phi_start, phi_delta, theta_start, theta_delta);
+	G4LogicalVolume *logicflüssigkern = new G4LogicalVolume(flüssigkern, solidEisen, "logicflüssigkern");
+	G4VPhysicalVolume *physflüssigkern = new G4PVPlacement(0, position, logicflüssigkern, "physflüssigkern", logicfesterkern, false, 0, true);
 }
 
 G4VPhysicalVolume *MyDetectorConstruction::Construct()
@@ -172,7 +195,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 	
 	physWorld = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicWorld, "physWorld", 0, false, 0, true);
 	
-	ConstructEarth4();
+	ConstructEarth();
 	
 	return physWorld;
 }

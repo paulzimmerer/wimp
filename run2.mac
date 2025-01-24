@@ -1,7 +1,9 @@
+/run/numberOfThreads 2
+/run/initialize
 /gps/particle wimp
 /gps/energy 2.7e-5 MeV
 /gps/pos/type Plane
 /gps/pos/shape Circle
 /gps/pos/radius 6371 km
 /gps/direction 0 0 1
-/run/beamOn 12
+/run/beamOn 1000000

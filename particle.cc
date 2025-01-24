@@ -15,7 +15,7 @@ MyCustomParticle* MyCustomParticle::Definition() {
 
 // Konstruktor
 MyCustomParticle::MyCustomParticle() 
-    : G4ParticleDefinition("wimp"/*Name*/, 1.0*GeV/*Masse*/, 0*GeV/*Ladung*/, .0/*Spin*/, 1/*Parität*/, 1, 1, 1, 1, 1, "boson", 143, 0, 9900015, false,-1, nullptr, false, "wimpModel",0,0) {
+    : G4ParticleDefinition("wimp"/*Name*/, 100*MeV/*Masse*/, 0*GeV/*Ladung*/, .0/*Spin*/, 1/*Parität*/, 1, 1, 1, 1, 1, "lepton", 143, 0, 9900015, false,-1, nullptr, false, "wimpModel",0,0) {
 
     SetProcessManager(new G4ProcessManager(this));
 }
